@@ -59,5 +59,4 @@ defmodule TcpChat.Handler do
 
     {:noreply, state}
   end
-
 end

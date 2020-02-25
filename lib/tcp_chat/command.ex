@@ -8,13 +8,17 @@ defmodule TcpChat.Command do
     state
   end
 
-  def handle_message(%{client: client, handle: handle, channel: channel} = state, "LEAVE" <> _rest) do
+  def handle_message(
+        %{client: client, handle: handle, channel: channel} = state,
+        "LEAVE" <> _rest
+      ) do
     send_everyone_in_channel(channel, {:leave, handle})
     :gen_tcp.send(client, "Left channel #{channel}.\n")
     %{state | channel: nil}
   end
 
-  def handle_message(%{handle: handle, channel: channel} = state, message) when not is_nil(channel) do
+  def handle_message(%{handle: handle, channel: channel} = state, message)
+      when not is_nil(channel) do
     send_everyone_in_channel(channel, {:message, handle, message})
     state
   end
